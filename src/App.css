@@ -16,6 +16,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 20px auto;
+  position: relative;
 }
 
 .field label {
@@ -31,4 +32,11 @@
 
 .field input {
   appearance: none;
+}
+
+.field span {
+  position: absolute;
+  bottom: -16px;
+  color: red;
+  right: 0;
 }
