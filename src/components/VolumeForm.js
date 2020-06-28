@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import { RATE_FORMULAS, VALUES_NAMES } from '../constants';
-import { updatePrice, updateTotal, updateUnits } from '../store/actions';
+import { updatePrice, updateTotal, updateUnits, changeFormula } from '../store/actions';
 
 const rateOptions = Object.entries(RATE_FORMULAS).map(([k, v]) => (
   <option value={k} key={k}>{v}</option>
 ));
 
 
-const VolumeForm = ({ className, volume, updatePrice, updateTotal, updateUnits }) => {
+const VolumeForm = ({ className, volume, updatePrice, updateTotal, updateUnits, changeFormula }) => {
   const [priceError, setPriceError] = useState('');
   const [totalError, setTotalError] = useState('');
   const [unitsError, setUnitsError] = useState('');
@@ -43,13 +43,13 @@ const VolumeForm = ({ className, volume, updatePrice, updateTotal, updateUnits }
   return (
     <div className={className}>
       <div className="field">
-        <label htmlFor={VALUES_NAMES.RATE}>Rate</label>
-        <select value={volume.rateFormula}>
+        <label htmlFor={VALUES_NAMES.RATE}>Formula:</label>
+        <select value={volume.rateFormula}  onChange={(e) => changeFormula(e.currentTarget.value)}>
           {rateOptions}
         </select>
       </div>
       <div className="field">
-        <label htmlFor={VALUES_NAMES.PRICE}>Price</label>
+        <label htmlFor={VALUES_NAMES.PRICE}>Price:</label>
         <input
           name={VALUES_NAMES.PRICE}
           type="number"
@@ -59,7 +59,7 @@ const VolumeForm = ({ className, volume, updatePrice, updateTotal, updateUnits }
         {priceError && <span>{priceError}</span>}
       </div>
       <div className="field">
-        <label htmlFor={VALUES_NAMES.TOTAL}>Total</label>
+        <label htmlFor={VALUES_NAMES.TOTAL}>Total:</label>
         <input
           name={VALUES_NAMES.TOTAL}
           type="number"
@@ -69,12 +69,20 @@ const VolumeForm = ({ className, volume, updatePrice, updateTotal, updateUnits }
         {totalError && <span>{totalError}</span>}
       </div>
       <div className="field">
-        <label htmlFor={VALUES_NAMES.UNITS}>Units</label>
+        <label htmlFor={VALUES_NAMES.UNITS}>Units:</label>
         <input
           name={VALUES_NAMES.UNITS}
           type="number"
           value={volume[VALUES_NAMES.UNITS]}
           onChange={onUnitsChange}
+        />
+        {unitsError && <span>{unitsError}</span>}
+      </div>
+      <div className="field">
+        <label>Rate:</label>
+        <input
+          value={volume[VALUES_NAMES.RATE]}
+          disabled={true}
         />
         {unitsError && <span>{unitsError}</span>}
       </div>
@@ -88,6 +96,7 @@ const mapDispatchToProps = dispatch => ({
   updatePrice: value => dispatch(updatePrice(value)),
   updateTotal: value => dispatch(updateTotal(value)),
   updateUnits: value => dispatch(updateUnits(value)),
+  changeFormula: formula => dispatch(changeFormula(formula)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(VolumeForm);
